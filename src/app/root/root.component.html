@@ -1,0 +1,128 @@
+<nav>
+  <div class="topnav">
+    <form class="d-flex" [formGroup]="inputForm" (ngSubmit)="onSubmit()">
+      <div id="custom-search-input" class="flex-grow-1 ml-5 my-2">
+        <div class="input-group">
+          <input
+            type="number"
+            class="search-query form-control"
+            placeholder="Enter Job ID..."
+            formControlName="job_id"
+          />
+          <span class="input-group-btn">
+            <button class="btn btn-danger" type="button" (click)="onSubmit()">
+              <i class="fa fa-search"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+      <div class="btn btn-primary btn-sm m-2 pt-1 mr-5" (click)="downloadPDF()">
+        Download PDF
+        <i class="fa fa-download" aria-hidden="true"></i>
+      </div>
+    </form>
+  </div>
+</nav>
+
+<div *ngIf="dataLoaded" id="pdfExport">
+  <section id="header">
+    <div class="logo text-center">
+      <img src="assets/images/1.png" alt="logo_image" />
+    </div>
+    <div class="d-flex justify-content-center">
+      <div class="meta text-center" style="max-width: 500px">
+        <h3 class="mb-3">Invoice</h3>
+        <div class="row">
+          <div class="col-6">Date <span class="float-right">:</span></div>
+          <div class="col-6">{{ firstTableData.start_date }}</div>
+          <div class="col-6">
+            Invoice Number <span class="float-right">:</span>
+          </div>
+          <div class="col-6">256xyz</div>
+          <div class="col-6">Total Time <span class="float-right">:</span></div>
+          <div class="col-6">{{ total_time }}</div>
+          <div class="col-6">Amount <span class="float-right">:</span></div>
+          <div class="col-6">{{ total_amount }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="table1" class="d-flex justify-content-center mt-5">
+    <table class="table table-bordered" style="width: 90%">
+      <thead>
+        <tr>
+          <th colspan="2" class="text-center">Job Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- <tr *ngFor="let item of firstTableData | keyvalue">
+          <td>{{ item.key }}</td>
+          <td>{{ item.value }}</td>
+        </tr> -->
+        <tr>
+          <td>Job Title</td>
+          <td>{{ firstTableData.job_title }}</td>
+        </tr>
+        <tr>
+          <td>Job Provider</td>
+          <td>{{ firstTableData.provider_name }}</td>
+        </tr>
+        <tr>
+          <td>Job Location</td>
+          <td>{{ firstTableData.location }}</td>
+        </tr>
+        <tr>
+          <td>Start Date</td>
+          <td>{{ firstTableData.start_date }}</td>
+        </tr>
+        <tr>
+          <td>End Date</td>
+          <td>{{ firstTableData.end_date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="table2" class="d-flex justify-content-center my-5">
+    <table class="table table-bordered" style="width: 90%">
+      <thead>
+        <tr>
+          <th>Employee Name</th>
+          <th>Regular Hour</th>
+          <th>Regular Rate</th>
+          <th>Regular Amount</th>
+          <th>OT Hour</th>
+          <th>OT Rate</th>
+          <th>OT Amount</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of secondTableData">
+          <td>{{ item.user_name }}</td>
+          <td>
+            {{ item.approval_time }}
+          </td>
+          <td>{{ item.approval_payment }}</td>
+          <td>
+            {{ item.regular_amount }}
+          </td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>
+            $
+            {{ item.regular_amount }}
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="7" class="text-right"><strong>SUB TOTAL : </strong></td>
+          <td>$ {{ total_amount }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </section>
+</div>
