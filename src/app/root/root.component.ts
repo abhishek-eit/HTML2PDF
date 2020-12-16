@@ -15,8 +15,8 @@ export class RootComponent implements OnInit {
   secondTableData: any;
   dataLoaded: boolean = false;
   inputForm: FormGroup;
-  total_time: any = 0;
-  total_amount: any = 0;
+  total_time: number = 0;
+  total_amount: number = 0;
   constructor(private mainService: MainService, private fb: FormBuilder) {
     this.inputForm = this.fb.group({ job_id: [null] });
   }
@@ -28,20 +28,24 @@ export class RootComponent implements OnInit {
     if (id && id > 0) {
       this.mainService.getData(id).subscribe((res: any) => {
         console.log(res);
-        this.firstTableData = res.jobTableData;
-        this.secondTableData = res.secondTableData;
-        this.secondTableData.forEach((element) => {
-          element.approval_time = Number(
-            element.approval_hour + element.approval_min / 60
-          ).toFixed(2);
-          element.regular_amount =
-            element.approval_time * element.approval_payment;
+        if (res.msg != "Something Went Wrong") {
+          this.firstTableData = res.jobTableData;
+          this.secondTableData = res.secondTableData;
+          this.secondTableData.forEach((element) => {
+            element.approval_time = Number(
+              element.approval_hour + +element.approval_min / 60
+            ).toFixed(2);
+            element.regular_amount =
+              element.approval_time * element.approval_payment;
 
-          this.total_time = this.total_time + element.approval_time;
-          this.total_amount = this.total_amount + element.regular_amount;
-        });
-        console.log(this.secondTableData);
-        this.dataLoaded = true;
+            this.total_time = this.total_time + +element.approval_time;
+            this.total_amount = this.total_amount + +element.regular_amount;
+          });
+          console.log(this.secondTableData);
+          this.dataLoaded = true;
+        } else {
+          this.dataLoaded = false;
+        }
       });
     }
   }
